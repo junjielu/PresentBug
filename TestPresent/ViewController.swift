@@ -8,13 +8,9 @@
 import UIKit
 import SnapKit
 
-class Navigator: UINavigationController {
-
-}
-
 extension UIViewController {
-  func wrappedWithinNavigator() -> Navigator {
-    Navigator(rootViewController: self)
+  func wrappedWithinNavigationController() -> UINavigationController {
+    UINavigationController(rootViewController: self)
   }
 }
 
@@ -22,9 +18,10 @@ class FirstViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view.
-    view.backgroundColor = .white
+    view.backgroundColor = .black
 
     navigationItem.title = "First"
+    navigationItem.largeTitleDisplayMode = .always
 
     let button = UIButton(type: .system)
     button.setTitle("Press", for: .normal)
@@ -52,26 +49,16 @@ class SecondViewController: UIViewController {
       $0.center.equalToSuperview()
     }
     button.addAction(.init(handler: { [weak self] _ in
-      self?.present(ThirdViewController().wrappedWithinNavigator(), animated: true)
+      self?.navigationController?.present(ThirdViewController().wrappedWithinNavigationController(), animated: true)
     }), for: .touchUpInside)
   }
 }
 
 class ThirdViewController: UIViewController {
-  weak var navigator: Navigator?
-
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view.
     view.backgroundColor = .red
     navigationItem.title = "Third"
-
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-      self.navigator = self.navigationController as? Navigator
-    }
   }
-
-//  deinit {
-//    self.navigator?.dismiss(animated: true)
-//  }
 }
